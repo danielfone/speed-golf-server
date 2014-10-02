@@ -8,7 +8,7 @@ set :database, {
 }
 
 get '/' do
-  @holes = 1..5
-  @teams = Team.order(:total)
+  @holes = '1'..'5'
+  @teams = Team.order('total DESC')
   erb :leaderboard
 end
