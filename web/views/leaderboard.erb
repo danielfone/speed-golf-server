@@ -19,7 +19,42 @@
     <![endif]-->
   </head>
   <body>
-    <h1>Hello, world!</h1>
+
+    <div class="navbar navbar-default navbar-static-top" role="navigation">
+      <div class="container">
+        <div class="navbar-header">
+          <a class="navbar-brand" href="#">chchruby - speed golf</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
+      <p>
+        Getting the code:
+        <code>
+          <%= "git clone git://#{request.host}/robotwars-arena" %>
+        </code>
+      </p>
+
+      <h2 class="page-header">Score Card</h2>
+      <table class="table table-striped leaderboard table-bordered table-condensed small" style="width:auto">
+        <thead>
+          <tr>
+            <th></th>
+            <th>Total</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Foo</td>
+            <td>Bar</td>
+          </tr>
+        </tbody>
+      </table>
+      <script type="text/javascript" charset="utf-8">
+        setTimeout(function(){ location.reload() }, 30000)
+      </script>
+    </div>
 
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
