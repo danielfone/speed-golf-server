@@ -48,14 +48,14 @@
           </tr>
         </thead>
         <tbody>
-          <% @teams.each do |name, scores| %>
+          <% @teams.each do |team| %>
             <tr>
-              <th><%= name %></th>
+              <th><%= team.name %></th>
               <% @holes.each do |hole| %>
-                <td><%= scores[hole] %></td>
+                <td><%= team.scores[hole] %></td>
               <% end %>
               <td>
-                <strong><%= scores[:total] %></strong>
+                <strong><%= team.total %></strong>
               </td>
             </tr>
           <% end %>
