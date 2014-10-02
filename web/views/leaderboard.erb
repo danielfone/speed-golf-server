@@ -37,18 +37,28 @@
       </p>
 
       <h2 class="page-header">Score Card</h2>
-      <table class="table table-striped leaderboard table-bordered table-condensed small" style="width:auto">
+      <table class="table table-striped leaderboard table-bordered" style="width:auto">
         <thead>
           <tr>
             <th></th>
+            <% @holes.each do |hole| %>
+              <th><%= hole %></th>
+            <% end %>
             <th>Total</th>
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <td>Foo</td>
-            <td>Bar</td>
-          </tr>
+          <% @teams.each do |name, scores| %>
+            <tr>
+              <th><%= name %></th>
+              <% @holes.each do |hole| %>
+                <td><%= scores[hole] %></td>
+              <% end %>
+              <td>
+                <strong><%= scores[:total] %></strong>
+              </td>
+            </tr>
+          <% end %>
         </tbody>
       </table>
       <script type="text/javascript" charset="utf-8">
