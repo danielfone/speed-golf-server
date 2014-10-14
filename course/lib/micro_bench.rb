@@ -10,12 +10,13 @@ class MicroBench < Struct.new(:object, :input, :values)
     @fail_count = 0
   end
 
-  def check(*methods)
-    puts "Testing #{methods.inspect}... "
-    methods.each { |m| check_method m }
+  def check(*args)
+    opts = args.last.is_a?(Hash) ? args.pop : {}
+    puts "Testing #{args.inspect}... "
+    args.each { |m| check_method m }
     if passed?
       puts_color ANSI_GREEN, "all good."
-      benchmark methods
+      benchmark args, opts
     end
   end
 
@@ -27,15 +28,14 @@ class MicroBench < Struct.new(:object, :input, :values)
     @fail_count == 0
   end
 
-  def benchmark(methods)
-    Benchmark.ips do |x|
-      x.time = 0.5
-      x.warmup = 0.1
+  def benchmark(methods, opts={})
+    opts[:time]   ||= 0.5
+    opts[:warmup] ||= 0.1
 
+    Benchmark.ips opts[:time], opts[:warmup] do |x|
       methods.each do |m|
         x.report(m.to_s) { object.public_send m, input }
       end
-
       x.compare!
     end
   end
