@@ -1,6 +1,7 @@
 require 'benchmark/ips'
 
 def benchmark(object, arg, *methods)
+
   Benchmark.ips do |x|
     x.time = 0.5
     x.warmup = 0.1
@@ -24,6 +25,4 @@ module Fibonacci
 
 end
 
-puts Fibonacci.recursive 10
-
-benchmark Fibonacci, 10, :recursive
+benchmark Fibonacci, 15, :recursive
