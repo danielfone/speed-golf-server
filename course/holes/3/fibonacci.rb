@@ -1,20 +1,4 @@
-require 'benchmark/ips'
-
-def benchmark(object, arg, *methods)
-
-  Benchmark.ips do |x|
-    x.time = 0.5
-    x.warmup = 0.1
-
-    methods.each do |m|
-      x.report(m.to_s) { object.public_send m, arg }
-    end
-
-    x.compare!
-  end
-end
-
-
+require_relative '../../lib/micro_bench'
 
 module Fibonacci
   module_function
@@ -23,6 +7,29 @@ module Fibonacci
     n <= 1 ? n : recursive(n-1) + recursive(n-2)
   end
 
+  @fib = [0, 1, 1]
+  def memoized(n)
+    @fib[n] ||= memoized(n-2) + memoized(n-1)
+  end
+
+  def iter(n)
+    curr_num, next_num = 0, 1
+    (n).times do
+        curr_num, next_num = next_num, curr_num + next_num
+    end
+    curr_num
+  end
+
+
 end
 
-benchmark Fibonacci, 15, :recursive
+b = MicroBench.new Fibonacci, 15, {
+  1 => 1,
+  2 => 1,
+  3 => 2,
+  4 => 3,
+  10 => 55,
+  15 => 610,
+  20 => 6765,
+}
+b.check :recursive, :memoized, :iter
