@@ -15,7 +15,7 @@ module Fibonacci
   def iter(n)
     curr_num, next_num = 0, 1
     (n).times do
-        curr_num, next_num = next_num, curr_num + next_num
+      curr_num, next_num = next_num, curr_num + next_num
     end
     curr_num
   end
