@@ -17,47 +17,81 @@ require_relative '../../lib/micro_bench'
 #
 # See the tests for futher examples
 
+require 'ruby-prof'
+
 module Bigrams
   module_function
 
   def parse(text)
-    Hash.new(0).tap do |h|
-      text.gsub(/[^\w\s]/, '|').downcase.split.each_cons(2) do |n1, n2|
-        next if n1.end_with?('|') || n2.start_with?('|')
-        key = "#{n1} #{n2}".delete '|'
-        h[key] += 1
-      end
+    tally = Hash.new(0)
+    text.gsub(/[^\w\s]/, '|').downcase.split.each_cons(2) do |n1, n2|
+      next if n1[-1] == '|' || n2[0] == '|'
+      bigram = "#{n1} #{n2}".delete '|'
+      tally[bigram] += 1
     end
+    tally
   end
+
+  def slower2(text)
+    tally = {}
+    prev_word = nil
+
+    text.split.each do |word|
+
+      word_starts_with_punctuation = word =~ /^[^\w\s]/
+      prev_word_ends_with_punctuation = prev_word =~ /[^\w\s]$/
+
+      break_for_punctuation = word_starts_with_punctuation || prev_word_ends_with_punctuation
+
+      if prev_word && ! break_for_punctuation
+        # Remove internal punctuation to create bigram
+        bigram = [
+          prev_word.downcase.gsub(/[^\w\s]/, ''),
+          word.downcase.gsub(/[^\w\s]/, ''),
+        ].join ' '
+
+        # Increment our counter
+        tally[bigram] = 0 unless tally.has_key? bigram
+        tally[bigram] += 1
+      end
+
+      # Remember our this word for next time
+      prev_word = word
+    end
+    tally
+  end
+
 end
 
 corpus = File.read File.expand_path("../midsummer.txt", __FILE__)
 
-b = MicroBench.new Bigrams, corpus, {
+Bigrams.parse corpus
 
-  "and then and then and then" => {
-    "and then" => 3,
-    "then and" => 2,
-  },
-
-  "Hello you, my name is hello you my" => {
-    "hello you" => 2,
-    "my name"   => 1,
-    "name is"   => 1,
-    "is hello"  => 1,
-    "you my"    => 1,
-  },
-
-  "Hello you how's it?" => {
-    "hello you" => 1,
-    "you hows"  => 1,
-    "hows it"   => 1,
-  },
-
-  "Hello you, how's it?" => {
-    "hello you" => 1,
-    "hows it"   => 1,
-  },
-}
-
-b.check :parse, time: 5
+#b = MicroBench.new Bigrams, corpus, {
+#
+#  "and then and then and then" => {
+#    "and then" => 3,
+#    "then and" => 2,
+#  },
+#
+#  "Hello you, my name is hello you my" => {
+#    "hello you" => 2,
+#    "my name"   => 1,
+#    "name is"   => 1,
+#    "is hello"  => 1,
+#    "you my"    => 1,
+#  },
+#
+#  "Hello you how's it?" => {
+#    "hello you" => 1,
+#    "you hows"  => 1,
+#    "hows it"   => 1,
+#  },
+#
+#  "Hello you, how's it?" => {
+#    "hello you" => 1,
+#    "hows it"   => 1,
+#  },
+#}
+#
+#b.check :parse, :slower2, time: 2
