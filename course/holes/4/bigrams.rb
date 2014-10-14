@@ -17,8 +17,6 @@ require_relative '../../lib/micro_bench'
 #
 # See the tests for futher examples
 
-require 'ruby-prof'
-
 module Bigrams
   module_function
 
@@ -65,33 +63,31 @@ end
 
 corpus = File.read File.expand_path("../midsummer.txt", __FILE__)
 
-Bigrams.parse corpus
+b = MicroBench.new Bigrams, corpus, {
 
-#b = MicroBench.new Bigrams, corpus, {
-#
-#  "and then and then and then" => {
-#    "and then" => 3,
-#    "then and" => 2,
-#  },
-#
-#  "Hello you, my name is hello you my" => {
-#    "hello you" => 2,
-#    "my name"   => 1,
-#    "name is"   => 1,
-#    "is hello"  => 1,
-#    "you my"    => 1,
-#  },
-#
-#  "Hello you how's it?" => {
-#    "hello you" => 1,
-#    "you hows"  => 1,
-#    "hows it"   => 1,
-#  },
-#
-#  "Hello you, how's it?" => {
-#    "hello you" => 1,
-#    "hows it"   => 1,
-#  },
-#}
-#
-#b.check :parse, :slower2, time: 2
+  "and then and then and then" => {
+    "and then" => 3,
+    "then and" => 2,
+  },
+
+  "Hello you, my name is hello you my" => {
+    "hello you" => 2,
+    "my name"   => 1,
+    "name is"   => 1,
+    "is hello"  => 1,
+    "you my"    => 1,
+  },
+
+  "Hello you how's it?" => {
+    "hello you" => 1,
+    "you hows"  => 1,
+    "hows it"   => 1,
+  },
+
+  "Hello you, how's it?" => {
+    "hello you" => 1,
+    "hows it"   => 1,
+  },
+}
+
+b.check :parse, :slower2, time: 2
