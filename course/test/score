@@ -1,0 +1,11 @@
+#!/usr/bin/env ruby
+
+require_relative 'benchmark'
+
+STDOUT.sync = true
+
+holes = ARGV.any? ? ARGV : Dir["holes/*"]
+
+holes.each do |hole|
+   require File.join ".", hole, "test.rb"
+end

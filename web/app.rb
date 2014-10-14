@@ -1,6 +1,7 @@
 require 'sinatra'
 require "sinatra/activerecord"
 require_relative 'team'
+require_relative '../config'
 
 set :database, {
   adapter: "postgresql",
@@ -8,7 +9,7 @@ set :database, {
 }
 
 get '/' do
-  @holes = '1'..'5'
+  @holes = HOLES
   @teams = Team.order('total DESC')
   erb :leaderboard
 end

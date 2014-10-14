@@ -15,8 +15,9 @@ class Team < ActiveRecord::Base
 private
 
   def store_total
-    values = scores.values.compact.map &:to_f
-    write_attribute :total, values.sum
+    values = HOLES.map {|h| scores[h] }.compact.map &:to_f
+    total = 1 + values.sum - values.count
+    write_attribute :total, total
   end
 
 end
