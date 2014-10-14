@@ -28,7 +28,7 @@ class MicroBench < Struct.new(:object, :input, :values)
   end
 
   def benchmark(methods)
-    Benchmark.ips quiet: true do |x|
+    Benchmark.ips do |x|
       x.time = 0.5
       x.warmup = 0.1
 
