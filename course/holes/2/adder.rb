@@ -1,19 +1,4 @@
-require 'benchmark/ips'
-
-def benchmark(object, arg, *methods)
-
-  Benchmark.ips do |x|
-    x.time = 0.5
-    x.warmup = 0.1
-
-    methods.each do |m|
-      x.report(m.to_s) { object.public_send m, arg }
-    end
-
-    x.compare!
-  end
-end
-
+require_relative '../../lib/micro_bench'
 
 module Adder
   module_function
@@ -21,6 +6,11 @@ module Adder
   def adder(text)
     text.scan(/[\d,\.]+/).map { |s| s.delete ',' }.map(&:to_f).reduce(0, :+)
   end
+
+  def split(text)
+    text.delete(',').split.map(&:to_f).reduce(0, :+)
+  end
+
 
 end
 
@@ -41,6 +31,9 @@ TEXT = <<-EOF
    1,138
 EOF
 
-benchmark Adder, TEXT, *[
-  :adder,
-]
+b = MicroBench.new Adder, TEXT*10, {
+  "4, 8, 15, 16, 23 and 42" => 108.0,
+  "1,123" => 1123,
+  "0.10001, 1.0" => 1.10001,
+}
+b.check :adder, :split
