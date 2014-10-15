@@ -34,4 +34,4 @@ b = MicroBench.new Adder, TEXT*10, {
   "1,123" => 1123,
   "0.10001, 1.0" => 1.10001,
 }
-b.check :scan, :scan_block
+b.check :scan, :scan_block, :split
