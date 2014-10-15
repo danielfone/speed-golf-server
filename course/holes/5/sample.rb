@@ -23,12 +23,24 @@ module Sample
 
   def del(limit)
     count = limit/2
-    sample = (1..limit).to_a
-    del_index = rand(limit)
-    (limit - count).times do |i|
-      sample.delete_at(del_index * i % limit-i)
+    population = (1..limit).to_a
+    sample = []
+    count.times do |i|
+      sample << population.delete_at(@prng.rand(population.size))
     end
     sample
+  end
+
+  def upto(limit)
+    count = limit/2
+    jump = 2
+    sample = {}
+    i = 0
+    count.times do
+      i += @prng.rand(jump)+1
+      sample[i % limit] = true
+    end
+    sample.keys
   end
 
   def hash(limit)
@@ -71,14 +83,16 @@ end
 
 TEST_METHODS = [
   :sample_half,
-#  :array,
+  :del,
   :hash,
   :hash2,
   :set,
+  :upto,
 ]
 
-Sample.hash2 100000
-
+#Sample.hash2 10000
+#Sample.upto 100000
+##Sample.set 100000
 #exit
 
 TEST_METHODS.each do |m|
@@ -89,5 +103,5 @@ TEST_METHODS.each do |m|
   fail "[#{m}] returned #{uniq_count} uniq elements, expected #{count}" if uniq_count != count
 end
 
-b = MicroBench.new Sample, 100_000, {}
+b = MicroBench.new Sample, 100000, {}
 b.check *TEST_METHODS
