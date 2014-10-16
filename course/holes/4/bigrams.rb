@@ -1,5 +1,3 @@
-require_relative '../../lib/micro_bench'
-
 # Bigrams are pairs of words found in a text.
 #
 # This module returns a hash of the pairs and their frequencies.
@@ -19,20 +17,12 @@ require_relative '../../lib/micro_bench'
 #
 # ~2.5x improvement available
 
+require_relative '../micro_bench'
+
 module Bigrams
   module_function
 
   def parse(text)
-    tally = Hash.new(0)
-    text.gsub(/[^\w\s]/, '|').downcase.split.each_cons(2) do |n1, n2|
-      next if n1[-1] == '|' || n2[0] == '|'
-      bigram = "#{n1} #{n2}".delete '|'
-      tally[bigram] += 1
-    end
-    tally
-  end
-
-  def slower2(text)
     tally = {}
     prev_word = nil
 
@@ -92,4 +82,4 @@ b = MicroBench.new Bigrams, corpus, {
   },
 }
 
-b.check :parse, :slower2, time: 2
+b.check :parse, time: 2
