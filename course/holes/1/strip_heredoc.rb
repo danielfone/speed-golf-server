@@ -1,25 +1,15 @@
-require_relative '../../lib/micro_bench'
-
 # Like ActiveSupport strip_heredoc, "unindents" a multiline strip
 #
 # ~2x improvement available
 
+require_relative '../micro_bench'
+
 module StripHeredoc
   module_function
 
-  def unindent_gem(string)
+  def unindent(string)
     indent = string.split("\n").select {|line| !line.strip.empty? }.map {|line| line.index(/[^\s]/) }.compact.min || 0
     string.gsub(/^[[:blank:]]{#{indent}}/, '')
-  end
-
-  def scan(string)
-    indent = string.scan(/^[ \t]*\b/).min
-    string.gsub /^#{indent}/,''
-  end
-
-  def unindent_by_min_dent(string)
-    dent = string.split("\n").reject(&:empty?).map { |line| line[/^\s*/] }.min_by(&:size)
-    string.gsub(/^#{dent}/, '')
   end
 
 end
@@ -39,4 +29,4 @@ b = MicroBench.new StripHeredoc, TEXT*10, {
   "  foo\n    bar\n  baz\n" => "foo\n  bar\nbaz\n",
 }
 
-b.check :unindent_gem, :scan, :unindent_by_min_dent
+b.check :unindent
