@@ -1,5 +1,11 @@
 require_relative '../../lib/micro_bench'
 
+# Return the nth fibonacci number
+#
+# ~300x improvement available
+#
+# Bonus points: increase n and see if different algorithms perform better
+
 module Fibonacci
   module_function
 

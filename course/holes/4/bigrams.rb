@@ -16,6 +16,8 @@ require_relative '../../lib/micro_bench'
 #        "hows it"
 #
 # See the tests for futher examples
+#
+# ~2.5x improvement available
 
 module Bigrams
   module_function

@@ -1,5 +1,9 @@
 require_relative '../../lib/micro_bench'
 
+# Like ActiveSupport strip_heredoc, "unindents" a multiline strip
+#
+# ~2x improvement available
+
 module StripHeredoc
   module_function
 

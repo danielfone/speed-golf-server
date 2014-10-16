@@ -1,5 +1,10 @@
 require_relative '../../lib/micro_bench'
 
+# Sum all the numbers in a string
+#
+# ~5x improvement available
+
+
 module Adder
   module_function
 

@@ -4,6 +4,9 @@ require_relative 'country_codes'
 # This function returns the name of a country for an ISO3166-1 alpha-3 code.
 # If you pass a valid country name, it will just return that instead.
 # The look up is case-insensitive.
+#
+# ~18x improvement available
+
 
 module Locale
   module_function
