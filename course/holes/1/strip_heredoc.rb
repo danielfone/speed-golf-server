@@ -24,8 +24,8 @@ TEXT = <<EOF
 EOF
 
 b = MicroBench.new StripHeredoc, TEXT*10, {
-  "\tabc\n\tabc" => "abc\nabc",
-  "x" => "x",
+  "\tabc\n\tabc"            => "abc\nabc",
+  "x"                       => "x",
   "  foo\n    bar\n  baz\n" => "foo\n  bar\nbaz\n",
 }
 
