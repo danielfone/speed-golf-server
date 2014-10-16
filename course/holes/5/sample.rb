@@ -14,7 +14,7 @@
 #   - being random (no, you can't test this. I'll be checking any winning algorithms)
 #
 # One rule: this is a BYO entropy challenge,
-#           you may not use use #sample or #shuffle
+#           you may not use #sample or #shuffle
 #
 # ~30x improvement available
 
@@ -42,12 +42,20 @@ TEST_METHODS = [
 ]
 
 # Unconvential tests because the output is random
-TEST_METHODS.each do |m|
-  limit = 100
-  count = limit / 2
-  res = Sample.public_send m, limit
-  uniq_count = res.uniq.count
-  fail "[#{m}] returned #{uniq_count} uniq elements, expected #{count}" if uniq_count != count
+TEST_METHODS.each do |method|
+  limit = 20
+  count = 10
+
+  result = Sample.public_send method, limit
+  fail "[#{method}] returned #{result.class.name}, expected Array" unless result.is_a? Array
+
+  uniq_count = result.uniq.count
+  fail "[#{method}] returned #{uniq_count} uniq elements, expected #{count}" if uniq_count != count
+
+  result.each do |n|
+    fail "[#{method}] included #{n} which is above limit #{limit}" if n > limit
+    fail "[#{method}] included #{n} which is less than 0" if n < 0
+  end
 end
 
 b = MicroBench.new Sample, 100000, {}
